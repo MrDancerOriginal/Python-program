@@ -1,4 +1,5 @@
 {
-    "database_path": "lesson4/data/database.db",
-    "production": false
+    "database_path": "data/database.db",
+    "production": true,
+    "secret_key": "5gz"
 }
