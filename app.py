@@ -1,6 +1,7 @@
 import customtkinter
 from login import Login
 from register import Register
+from user_profile import UserProfile
 
 customtkinter.set_appearance_mode("dark")
 customtkinter.set_default_color_theme("dark-blue")
@@ -10,7 +11,7 @@ class App(customtkinter.CTk):
     def __init__(self, *args, **kwargs):
         customtkinter.CTk.__init__(self, *args, **kwargs)
 
-        self.geometry("600x350")
+        self.geometry("1100x600")
         self.resizable(False, False)
         container = customtkinter.CTkFrame(self)
         container.pack(side="top", fill="both", expand=True)
@@ -20,14 +21,14 @@ class App(customtkinter.CTk):
 
         self.frames = {}
 
-        for Frame in (Login, Register):
+        for Frame in (Login, Register, UserProfile):
             frame = Frame(container, self)
 
             self.frames[Frame] = frame
 
             frame.grid(row=0, column=0, sticky="nsew")
 
-        self.show_frame(Login)
+        self.show_frame(UserProfile)
 
     def show_frame(self, type):
         frame = self.frames[type]

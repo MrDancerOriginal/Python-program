@@ -1,4 +1,6 @@
+import sqlite3
 from data.data_context import DataContext
+from model.base_user import BaseUser
 from model.user import User
 
 
@@ -10,36 +12,71 @@ class UserRepository:
 
         for i in self.get_users():
             print(i)
+
     # TODO - add supportive id for user
-
-    def add_user(self, username, nickname, password):
+    def add_user(self, username, nickname, password, salt):
         self._dbmanager.add_record(table="Users", record={
-                                   "id": 0, "name": username, "nickname": nickname, "password": password})
+                                   "id": 0, "name": username, "nickname": nickname, "password": password, "salt": salt})
 
-    def get_user(self, username, password):
-        self._dbmanager.filter_records(
-            table="Users", record={"name": username, "password": password})
+    def get_user(self, username):
+        return self._dbmanager.filter_records(
+            table="Users", values={"name": username})
 
     # -------------------
 
     def get_users(self) -> list:
-        raw_users = self._dbmanager.get_all_records(
-            table="Users", database=self.data_context.config["database_path"])
 
-        users = []
+        try:
+            db: sqlite3.Connection = sqlite3.connect()
+            cursor = db.cursor()
 
-        for raw_user in raw_users:
-            users.append(self.map_user(raw_user))
+            query = """SELECT name, nickname FROM Users"""
 
-        return users
+            cursor.execute(query)
+
+            users = cursor.fetchall()
+            base_users = []
+
+            for user in users:
+                base_user = self.map_base_user(user)
+                base_users.append(base_user)
+
+            return base_users
+
+        except sqlite3.Error:
+            pass
+
+        # raw_users = self._dbmanager.get_all_records(
+        #     table="Users", database=self.data_context.config["database_path"])
+
+        # users = []
+
+        # for raw_user in raw_users:
+        #     user = self.map_user(raw_user)
+
+        #     if user is not None:
+        #         users.append(self.map_user(raw_user))
+
+        # return users
 
     # ------------------
+
+    def map_base_user(self, raw_user) -> BaseUser:
+        try:
+            base_user = BaseUser(raw_user.name,
+                                 raw_user.nickname)
+
+            return base_user
+        except Exception as e:
+            return None
 
     def map_user(self, raw_user) -> User:
         try:
             user = User(raw_user["username"],
-                        raw_user["nickname"], raw_user["password"])
+                        raw_user["nickname"],
+                        raw_user["password"],
+                        raw_user["salt"])
 
             return user
         except:
-            pass
+            return None

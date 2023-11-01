@@ -1,10 +1,14 @@
 import customtkinter
+from login import Login
 import main
 from utils.variables import *
+
 
 class Register(customtkinter.CTkFrame):
     def __init__(self, parent, controller):
         customtkinter.CTkFrame.__init__(self, parent)
+
+        self.controller = controller
 
         label = customtkinter.CTkLabel(
             master=self, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, text="Регістрація")
@@ -26,6 +30,10 @@ class Register(customtkinter.CTkFrame):
         button = customtkinter.CTkButton(
             master=self, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, text="Регістрація", command=self.register_callback)
         button.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
+
+        self.register_button = customtkinter.CTkButton(
+            master=self, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, text="Вже є аккаунт?", command=lambda: self.controller.show_frame(Login))
+        self.register_button.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
 
     def register_callback(self):
         name = self.name_input.get()

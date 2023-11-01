@@ -1,6 +1,5 @@
 import customtkinter
 from utils.variables import *
-from register import Register
 import main
 
 
@@ -26,10 +25,6 @@ class Login(customtkinter.CTkFrame):
         self.button = customtkinter.CTkButton(
             master=self, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, text="Авторизація", command=self.login)
         self.button.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
-
-        self.register_button = customtkinter.CTkButton(
-            master=self, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, text="Вже є аккаунт?", command=lambda: self.controller.show_frame(Register))
-        self.register_button.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
 
     def login(self):
         name = self.name_input.get()

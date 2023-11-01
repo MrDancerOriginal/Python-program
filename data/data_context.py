@@ -19,6 +19,7 @@ class DataContext():
             self._dbmanager.add_columns(column_name="name", not_null=True)
             self._dbmanager.add_columns(column_name="nickname", not_null=True)
             self._dbmanager.add_columns(column_name="password", not_null=True)
+            self._dbmanager.add_columns(column_name="salt", not_null=True)
 
             self._dbmanager.create_table(
                 database=self.config["database_path"], table_name="Users")
