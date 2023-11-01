@@ -2,11 +2,6 @@ import customtkinter
 import main
 from utils.variables import *
 
-
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("dark-blue")
-
-
 class Register(customtkinter.CTkFrame):
     def __init__(self, parent, controller):
         customtkinter.CTkFrame.__init__(self, parent)

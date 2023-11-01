@@ -1,13 +1,11 @@
 import bcrypt
-import data.data_context
-import data.user_repository
+import data.uow
 
-data_context = data.data_context.DataContext()
-user_repository = data.user_repository.UserRepository(data_context)
+uow = data.uow.UnitOfWork()
 
 
 def hash(password) -> str:
-    password = password+data_context.config["secret_key"]
+    password = password+uow.config["secret_key"]
     salt = bcrypt.gensalt()
 
     hashed = bcrypt.hashpw(password.encode('utf-8'), salt)
@@ -25,11 +23,11 @@ def check(login_password, hashed_password):
 
 
 def register(name, nickname, password):
-    user_repository.add_user(name, nickname, hash(password))
+    uow.user_repository.add_user(name, nickname, hash(password))
 
 
 def login(name, password):
-    for user in user_repository.get_users():
-        if check(password+data_context.config["secret_key"],
+    for user in uow.user_repository.get_users():
+        if check(password+uow.config["secret_key"],
                  hash(user["password"])) and user["name"] == name:
             print("Знайдено")

@@ -1,38 +1,38 @@
 import customtkinter
 from utils.variables import *
+from register import Register
 import main
-customtkinter.set_appearance_mode("dark")
-customtkinter.set_default_color_theme("dark-blue")
-
-rt = customtkinter.CTk()
-
-rt.geometry("600x350")
 
 
-def login():
-    name = name_input.get()
-    password = password_input.get()
+class Login(customtkinter.CTkFrame):
+    def __init__(self, parent, controller):
+        customtkinter.CTkFrame.__init__(self, parent)
 
-    main.login(name, password)
+        self.controller = controller
 
+        label = customtkinter.CTkLabel(
+            master=self, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, text="Login System", font=("Roboto", 24))
 
-fr = customtkinter.CTkFrame(master=rt)
-fr.pack(pady=40, padx=120, fill="both", expand=True)
+        label.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
 
-label = customtkinter.CTkLabel(
-    master=fr, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, text="Login System", font=("Roboto", 24))
-label.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
+        self.name_input = customtkinter.CTkEntry(
+            master=self, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, placeholder_text="Ім'я")
+        self.name_input.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
 
-name_input = customtkinter.CTkEntry(
-    master=fr, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, placeholder_text="Ім'я")
-name_input.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
+        self.password_input = customtkinter.CTkEntry(
+            master=self, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, placeholder_text="Пароль", show="*")
+        self.password_input.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
 
-password_input = customtkinter.CTkEntry(
-    master=fr, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, placeholder_text="Пароль", show="*")
-password_input.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
+        self.button = customtkinter.CTkButton(
+            master=self, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, text="Авторизація", command=self.login)
+        self.button.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
 
-button = customtkinter.CTkButton(
-    master=fr, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, text="Авторизація", command=login)
-button.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
+        self.register_button = customtkinter.CTkButton(
+            master=self, width=DEFAULT_INPUT_WIDTH, height=DEFAULT_INPUT_HEIGHT, text="Вже є аккаунт?", command=lambda: self.controller.show_frame(Register))
+        self.register_button.pack(pady=DEFAULT_PADY, padx=DEFAULT_PADX)
 
-rt.mainloop()
+    def login(self):
+        name = self.name_input.get()
+        password = self.password_input.get()
+
+        main.login(name, password)
